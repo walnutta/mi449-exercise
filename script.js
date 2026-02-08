@@ -1,5 +1,4 @@
 const CLIENT_ID = '1033134295530-pi2h820jain283909outp94cj8gbc0hb.apps.googleusercontent.com';
-const SCOPES = 'https://www.googleapis.com/auth/youtube';
 
 const authorizeButton = document.getElementById('authorize-button');
 const signoutButton = document.getElementById('signout-button');
@@ -57,7 +56,11 @@ function handleAuthClick() {
 }
 
 function handleSignoutClick() {
-    gapi.auth2.getAuthInstance().signOut();
+    google.accounts.id.disableAutoSelect();
+    statusMessage.textContent = 'Signed out successfully!';
+    content.style.display = 'none';
+    authorizeButton.style.display = 'block';
+    signoutButton.style.display = 'none';
 }
 
 function createInput() {
@@ -161,5 +164,28 @@ async function createPlaylist() {
 
 createPlaylistBtn.addEventListener('click', createPlaylist);
 
-// Load auth2 library when page loads
-handleClientLoad();
+// Replacing deprecated gapi.auth2 with Google Identity Services (GIS)
+function handleCredentialResponse(response) {
+    console.log('Encoded JWT ID token: ' + response.credential);
+    statusMessage.textContent = 'Signed in successfully!';
+    content.style.display = 'block';
+    authorizeButton.style.display = 'none';
+    signoutButton.style.display = 'block';
+}
+
+function initializeGSI() {
+    google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleCredentialResponse
+    });
+
+    google.accounts.id.renderButton(
+        authorizeButton, // The button container
+        { theme: 'outline', size: 'large' } // Button customization
+    );
+
+    google.accounts.id.prompt(); // Automatically prompt the user
+}
+
+// Initialize GIS on page load
+initializeGSI();
