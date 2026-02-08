@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playlist Maker</title>
+</head>
+<body>
+    <main>
+        <h1>Create a Playlist</h1> 
+        <button id="authorize-button" style="display: none;">Sign in with Google</button>
+        <button id="signout-button" style="display: none;">Sign Out</button>
+
+         <div id="content" style="display: none;">
+        <h3>Playlist Name:</h3>
+        <input type="text" id="playlist-title" placeholder="My Awesome Playlist">
+        
+        <h3>Songs:</h3>
+        <div id="song-container"></div>
+        <button id="create-playlist-button">Create YouTube Playlist</button>
+        </div>
+        
+        <div id="status"></div>
+    </main>
+
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
