@@ -189,3 +189,5 @@ function initializeGSI() {
 
 // Initialize GIS on page load
 initializeGSI();
+
+createInput(); // Create the first input field on page load
