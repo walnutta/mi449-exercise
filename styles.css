@@ -1,1 +1,174 @@
-/* Tailwind is used for styling. Legacy CSS removed. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --main-color: #161619;
+    --sub-color: #E6E8E6;
+    --decor1-color:#3772FF;
+    --decor2-color:#3268e8;
+    --padding-xs: 10px;
+    --padding-sm: 2rem;
+    --padding-md: 5rem;
+    --padding-lg: 10rem;
+    --font-reg: 2rem;
+    --font-sm: 3rem;
+    --font-xs: 1.5rem;
+    --font-md:5rem;
+    --font-lg:10rem;
+    
+}
+
+html,body {
+    font-family: 'Inter', sans-serif;
+    background-color:var(--main-color);
+    height: 100%;
+    margin: 0;
+    color: var(--sub-color);
+    scroll-behavior: smooth;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 7rem;
+    margin-left: var(--padding-lg);
+    margin-right: var(--padding-lg);
+}
+
+h1 {
+    font-size: var(--font-sm);
+}
+
+h2 {
+    font-size: var(--font-reg);
+}
+
+/* Avoid styling every div globally — target specific containers instead */
+
+/* Keep other divs default; set specific layout for main content areas */
+#content, #song-container {
+    padding: 0;
+    margin: 0 0 var(--padding-sm) 0;
+    display: block;
+}
+
+#intro {
+    font-size: var(--font-reg);
+    margin-top: -3.7rem;
+}
+
+.viewer {
+    margin: var(--padding-md);
+    border-radius: var(--padding-xs);
+    border-color: transparent;
+    transition: all 1s ease-in-out;
+}
+.viewer::-webkit-scrollbar {
+    width: 4px;
+}
+.viewer::-webkit-scrollbar-track {
+    background: transparent;
+}
+.viewer::-webkit-scrollbar-thumb {
+    background:var(--color-border);
+    border-radius: 2px;
+}
+
+#timeline, #projects, #courses{
+    padding-top: var(--padding-md);
+    padding-bottom:var(--padding-sm);
+}
+
+.part {
+    display: flex;
+    flex-direction: row;
+    font-size: var(--font-xs);
+}
+.date{
+    flex:0.45;
+}
+.content{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.content:hover {
+    color:var(--decor1-color);
+}
+
+button {
+    padding: var(--padding-xs);
+    border: transparent;
+    background-color: white;
+    color: var(--main-color);
+    border-radius: 4px;
+    display: inline-block;
+    width: var(--padding-lg);
+    font-size: 20px;
+    margin-top: var(--padding-xs);
+    margin-bottom: var(--padding-xs);
+ }
+
+button:hover {
+    transform: scale(1.1);
+    background-color: var(--decor2-color);
+    color: var(--sub-color);
+}
+
+#authorize-button {
+    width: var(--padding-lg);
+    padding: 0;
+    background-color: transparent !important;
+    color: inherit !important;
+    border-radius: 0 !important;
+    display: inline-block;
+    font-size: inherit !important;
+    border: none !important;
+    transform: none !important;
+}
+
+#authorize-button:hover {
+    transform: none !important;
+    background-color: transparent !important;
+    color: inherit !important;
+}
+ 
+footer {
+    text-align: center;
+    font-size: small;
+    color:var(--sub-color);
+    background-color: black;
+}
+
+/* Style the playlist name input */
+#playlist-title {
+    width: 60%;
+    max-width: 600px;
+    box-sizing: border-box;
+    padding: 0.6rem var(--padding-xs);
+    margin-bottom: var(--padding-xs);
+    border: 1px solid var(--decor1-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--sub-color);
+    color: var(--main-color);
+}
+
+/* Style the song input fields */
+.song-input {
+    width: 60%;
+    max-width: 600px;
+    box-sizing: border-box;
+    padding: 0.6rem var(--padding-xs);
+    margin-bottom: var(--padding-xs);
+    border: 1px solid var(--decor1-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--sub-color);
+    color: var(--main-color);
+}
