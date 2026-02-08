@@ -1,4 +1,5 @@
-const CLIENT_ID = '1033134295530-pi2h820jain283909outp94cj8gbc0hb.apps.googleusercontent.com';
+const CLIENT_ID = (window.CONFIG && window.CONFIG.CLIENT_ID) || '1033134295530-pi2h820jain283909outp94cj8gbc0hb.apps.googleusercontent.com';
+const SCOPES = 'https://www.googleapis.com/auth/youtube';
 
 const authorizeButton = document.getElementById('authorize-button');
 const signoutButton = document.getElementById('signout-button');
@@ -8,59 +9,79 @@ const container = document.getElementById('song-container');
 const createPlaylistBtn = document.getElementById('create-playlist-button');
 const playlistTitleInput = document.getElementById('playlist-title');
 
-// Load the API client and auth2 library
-function handleClientLoad() {
-    gapi.load('client:auth2', initClient);
-}
+let tokenClient;
+let accessToken = null;
 
-function initClient() {
-    gapi.client.init({
-        clientId: CLIENT_ID,
-        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'],
-        scope: SCOPES
-    }).then(() => {
-        // Listen for sign-in state changes
-        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-        
-        // Handle initial sign-in state
-        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-        
-        authorizeButton.onclick = handleAuthClick;
-        signoutButton.onclick = handleSignoutClick;
-    }).catch((error) => {
-        statusMessage.textContent = 'Error loading Google API: ' + JSON.stringify(error);
+// Initialize gapi
+gapi.load('client', async () => {
+    await gapi.client.init({
+        discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest']
     });
+    
+});
+
+// Initialize Google OAuth2
+function initializeGSI() {
+    // Create OAuth2 token client
+    tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (response) => {
+            if (response.error) {
+                console.error(response);
+                statusMessage.textContent = 'Error signing in: ' + response.error;
+                return;
+            }
+            accessToken = response.access_token;
+            gapi.client.setToken({access_token: accessToken});
+            
+            // Update UI
+            statusMessage.textContent = 'Signed in successfully!';
+            content.style.display = 'block';
+            authorizeButton.style.display = 'none';
+            signoutButton.style.display = 'block';
+        }
+    });
+
+    // Render the Google Sign-In button
+    google.accounts.id.initialize({
+        client_id: CLIENT_ID,
+        callback: handleSignInWithGoogle
+    });
+
+    google.accounts.id.renderButton(
+        authorizeButton,
+        { 
+            theme: 'outline', 
+            size: 'large',
+            text: 'signin_with',
+            width: 250
+        }
+    );
 }
 
-function updateSigninStatus(isSignedIn) {
-    if (isSignedIn) {
-        authorizeButton.style.display = 'none';
-        signoutButton.style.display = 'block';
-        content.style.display = 'block';
-        statusMessage.textContent = 'Signed in successfully!';
+// This handles the visual sign-in, then we request OAuth token
+function handleSignInWithGoogle(response) {
+    console.log('Signed in, now requesting YouTube permissions...');
+    // After sign-in, request OAuth token for YouTube access
+    tokenClient.requestAccessToken({prompt: 'consent'});
+}
+
+// Handle sign out
+function handleSignoutClick() {
+    if (accessToken) {
+        google.accounts.oauth2.revoke(accessToken);
+        gapi.client.setToken(null);
+        accessToken = null;
         
-        // Create first input if none exist
-        if (container.children.length === 0) {
-            createInput();
-        }
-    } else {
+        google.accounts.id.disableAutoSelect();
+        
+        statusMessage.textContent = 'Signed out successfully!';
+        content.style.display = 'none';
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
-        content.style.display = 'none';
-        statusMessage.textContent = 'Please sign in to continue.';
+        container.innerHTML = '';
     }
-}
-
-function handleAuthClick() {
-    gapi.auth2.getAuthInstance().signIn();
-}
-
-function handleSignoutClick() {
-    google.accounts.id.disableAutoSelect();
-    statusMessage.textContent = 'Signed out successfully!';
-    content.style.display = 'none';
-    authorizeButton.style.display = 'block';
-    signoutButton.style.display = 'none';
 }
 
 function createInput() {
@@ -124,6 +145,8 @@ async function createPlaylist() {
                 part: 'snippet',
                 q: songNames[i],
                 type: 'video',
+                videoCategoryId: '10',
+                order: 'relevance',
                 maxResults: 1
             });
             
@@ -148,46 +171,23 @@ async function createPlaylist() {
                 }
             });
             
-            // Small delay to avoid rate limits
             await new Promise(resolve => setTimeout(resolve, 200));
         }
         
-        statusMessage.innerHTML = `Success! <a href="https://www.youtube.com/playlist?list=${playlistId}" target="_blank">View your playlist on YouTube</a>`;
+        statusMessage.innerHTML = `✅ Success! <a href="https://www.youtube.com/playlist?list=${playlistId}" target="_blank">View your playlist on YouTube</a>`;
         
     } catch (error) {
-        statusMessage.textContent = 'Error: ' + error.result.error.message;
+        statusMessage.textContent = 'Error: ' + (error.result?.error?.message || error.message);
         console.error(error);
     } finally {
         createPlaylistBtn.disabled = false;
     }
 }
 
+// Event listeners
+signoutButton.addEventListener('click', handleSignoutClick);
 createPlaylistBtn.addEventListener('click', createPlaylist);
 
-// Replacing deprecated gapi.auth2 with Google Identity Services (GIS)
-function handleCredentialResponse(response) {
-    console.log('Encoded JWT ID token: ' + response.credential);
-    statusMessage.textContent = 'Signed in successfully!';
-    content.style.display = 'block';
-    authorizeButton.style.display = 'none';
-    signoutButton.style.display = 'block';
-}
-
-function initializeGSI() {
-    google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: handleCredentialResponse
-    });
-
-    google.accounts.id.renderButton(
-        authorizeButton, // The button container
-        { theme: 'outline', size: 'large' } // Button customization
-    );
-
-    google.accounts.id.prompt(); // Automatically prompt the user
-}
-
-// Initialize GIS on page load
+// Initialize everything on page load
 initializeGSI();
-
-createInput(); // Create the first input field on page load
+createInput();

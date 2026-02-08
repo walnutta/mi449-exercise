@@ -48,44 +48,15 @@ h2 {
     font-size: var(--font-reg);
 }
 
-.folder-nav {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 1rem;
-    gap: 0.6rem;  
-    background-color: black;
+/* Avoid styling every div globally — target specific containers instead */
+
+/* Keep other divs default; set specific layout for main content areas */
+#content, #song-container {
+    padding: 0;
+    margin: 0 0 var(--padding-sm) 0;
+    display: block;
 }
 
-.folder-tab {
-    margin-top: 1rem;
-    padding: 0.75rem 1.5rem;
-    background-color: transparent;
-    color: var(--sub-color);
-    width:var(--padding-m);
-    text-align: center;
-    text-decoration: none;
-    border-bottom: 3px solid transparent;
-    border-top-left-radius: var(--padding-xs);
-    border-top-right-radius: var(--padding-xs);
-    position: relative;
-    top: 3px;
-    transition: all 0.3s;
-}
-
-.folder-tab:hover {
-    background-color: var(--decor2-color);
-    top: 0;
-}
-.folder-tab:last-child {
-  border-right: none; /* remove last divider */
-}
-
-.folder-tab.active {
-    width:var(--padding-lg);
-    background-color: var(--main-color);
-    top: 0;
-    border-bottom: 3px solid transparent;
-}
 #intro {
     font-size: var(--font-reg);
     margin-top: -3.7rem;
@@ -131,14 +102,16 @@ h2 {
 }
 
 button {
-    padding: var(--padding-xs)+2rem;
+    padding: var(--padding-xs);
     border: transparent;
-    background-color: var(--decor1-color);
-    color: var(--sub-color);
-    border-radius: var(--padding-xs);
+    background-color: white;
+    color: var(--main-color);
+    border-radius: 4px;
     display: inline-block;
-    width: auto;
-    font-size: var(--font-reg)-2rem;
+    width: var(--padding-lg);
+    font-size: 20px;
+    margin-top: var(--padding-xs);
+    margin-bottom: var(--padding-xs);
  }
 
 button:hover {
@@ -146,10 +119,56 @@ button:hover {
     background-color: var(--decor2-color);
     color: var(--sub-color);
 }
+
+#authorize-button {
+    width: var(--padding-lg);
+    padding: 0;
+    background-color: transparent !important;
+    color: inherit !important;
+    border-radius: 0 !important;
+    display: inline-block;
+    font-size: inherit !important;
+    border: none !important;
+    transform: none !important;
+}
+
+#authorize-button:hover {
+    transform: none !important;
+    background-color: transparent !important;
+    color: inherit !important;
+}
  
 footer {
     text-align: center;
     font-size: small;
     color:var(--sub-color);
     background-color: black;
+}
+
+/* Style the playlist name input */
+#playlist-title {
+    width: 60%;
+    max-width: 600px;
+    box-sizing: border-box;
+    padding: 0.6rem var(--padding-xs);
+    margin-bottom: var(--padding-xs);
+    border: 1px solid var(--decor1-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--sub-color);
+    color: var(--main-color);
+}
+
+/* Style the song input fields */
+.song-input {
+    width: 60%;
+    max-width: 600px;
+    box-sizing: border-box;
+    padding: 0.6rem var(--padding-xs);
+    margin-bottom: var(--padding-xs);
+    border: 1px solid var(--decor1-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: var(--sub-color);
+    color: var(--main-color);
 }

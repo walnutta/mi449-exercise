@@ -9,16 +9,16 @@
 <body>
     <main>
         <h1>Create a Playlist</h1> 
-        <button id="authorize-button" style="display: none;">Sign in with Google</button>
+        <button id="authorize-button">Sign in with Google</button>
         <button id="signout-button" style="display: none;">Sign Out</button>
 
          <div id="content" style="display: none;">
         <h3>Playlist Name:</h3>
-        <input type="text" id="playlist-title" placeholder="My Awesome Playlist">
+        <input type="text" id="playlist-title" placeholder="My Playlist">
         
         <h3>Songs:</h3>
         <div id="song-container"></div>
-        <button id="create-playlist-button">Create YouTube Playlist</button>
+        <button id="create-playlist-button">Create Playlist</button>
         </div>
         
         <div id="status"></div>
@@ -27,6 +27,8 @@
         <p>For MI449</p>
     </footer>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

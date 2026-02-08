@@ -1,0 +1,7 @@
+// Copy this file to `config.js` and add your CLIENT_ID.
+// This file is ignored by git when named `config.js`.
+
+window.CONFIG = {
+  // Replace with your OAuth 2.0 Client ID
+  CLIENT_ID: '1033134295530-pi2h820jain283909outp94cj8gbc0hb.apps.googleusercontent.com'
+};
