@@ -8,6 +8,7 @@ const statusMessage = document.getElementById('status');
 const container = document.getElementById('song-container');
 const createPlaylistBtn = document.getElementById('create-playlist-button');
 const playlistTitleInput = document.getElementById('playlist-title');
+const buttonWaitMessage = document.getElementById('button-wait-message');
 
 let tokenClient;
 let accessToken = null;
@@ -30,6 +31,7 @@ function initializeGSI() {
             if (response.error) {
                 console.error(response);
                 statusMessage.textContent = 'Error signing in: ' + response.error;
+                buttonWaitMessage.classList.add('hidden');
                 return;
             }
             accessToken = response.access_token;
@@ -40,6 +42,7 @@ function initializeGSI() {
             content.style.display = 'block';
             authorizeButton.style.display = 'none';
             signoutButton.style.display = 'block';
+            buttonWaitMessage.classList.add('hidden');
         }
     });
 
@@ -63,6 +66,8 @@ function initializeGSI() {
 // This handles the visual sign-in, then we request OAuth token
 function handleSignInWithGoogle(response) {
     console.log('Signed in, now requesting YouTube permissions...');
+    // Show the help message
+    buttonWaitMessage.classList.remove('hidden');
     // After sign-in, request OAuth token for YouTube access
     tokenClient.requestAccessToken({prompt: 'consent'});
 }
@@ -87,7 +92,7 @@ function handleSignoutClick() {
 function createInput() {
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = 'Enter song name (e.g., "Bohemian Rhapsody Queen")';
+    input.placeholder = 'Enter song name (hit Enter for next)';
     input.className = 'song-input';
     
     input.addEventListener('keydown', (e) => {
