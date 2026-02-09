@@ -4,65 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playlist Maker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen flex flex-col bg-[#161619] text-[#E6E8E6] font-sans" style="font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;">
-    <nav class="bg-gray-800 text-white py-4 px-6 flex justify-between items-center">
-        <div class="text-lg font-semibold">Playlist Maker</div>
-        <ul class="flex space-x-4">
-            <li><a href="#" class="hover:underline">Home</a></li>
-            <li><a href="reflection.html" class="hover:underline">Reflection</a></li>
-        </ul>
-    </nav>
+<body>
+    <main>
+        <h1>Create a Playlist</h1> 
+        <button id="authorize-button">Sign in with Google</button>
+        <button id="signout-button" style="display: none;">Sign Out</button>
 
-    <main class="flex-1 max-w-3xl mx-auto px-6 py-16">
-        <h1 class="text-4xl font-semibold mb-6">Create a Playlist</h1>
-
-        <div class="flex items-center gap-4 mb-6">
-            <button id="authorize-button" class="bg-white text-[#161619] px-5 py-2 rounded-md shadow hover:scale-105 transform transition">Sign in with Google</button>
-            <button id="signout-button" class="hidden bg-gray-700 text-[#E6E8E6] px-4 py-2 rounded-md">Sign Out</button>
+         <div id="content" style="display: none;">
+        <h3>Playlist Name:</h3>
+        <input type="text" id="playlist-title" placeholder="My Playlist">
+        
+        <h3>Songs:</h3>
+        <div id="song-container"></div>
+        <button id="create-playlist-button">Create Playlist</button>
         </div>
-
-        <div id="content" class="hidden">
-            <label class="block text-lg font-medium mb-2">Playlist Name:</label>
-            <input type="text" id="playlist-title" placeholder="My Playlist" class="song-input w-[100%] max-w-[600px] box-border px-4 py-2 mb-2 rounded border border-[#3772FF] bg-white text-black">
-            
-            <label class="block text-lg font-medium mb-2">Songs:</label>
-            <div id="song-container" class="flex flex-col gap-2 mb-4"></div>
-            <button id="create-playlist-button" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 transition">Create Playlist</button>
-        </div>
-
-        <div id="status" class="mt-4 text-sm"></div>
+        
+        <div id="status"></div>
     </main>
-    <footer class="text-center text-sm text-gray-400 bg-black py-4">
+    <footer>
         <p>For MI449</p>
     </footer>
-
-    <div id="reflection-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-        <div class="bg-white text-black p-6 rounded-lg max-w-3xl w-full">
-            <h1 class="text-2xl font-bold mb-4">Reflection on using AI tools</h1>
-            <p class="mb-4">First I created a simple html to display and get my OAuth and JS library I wanted to use. Then I attached the YouTube API JavaScript library, set up the OAuth2 flow and wrote a simple js script to allow user to enter song name for search (createInput()). I first used Claude Haiku 4.5 to help fixing problems with the API call on the log-in functionality because it was ill-formatted on the google credentials site.</p>
-            <p class="mb-4">Prompt: "the sign in with google button is not visible upon page load and it auto display the google sign in dialog at the corner instead."</p>
-            <p class="mb-4">Response: I'll examine the files to understand the current implementation and identify the issue with the Google sign-in button. Let me see the rest of the JavaScript file:</p>
-            <p class="mb-4">I found the issues! The problems are:</p>
-            <ul class="list-disc pl-6 mb-4">
-                <li>The authorize button has style="display: none;" in the HTML</li>
-                <li>google.accounts.id.prompt() is being called at initialization, which auto-displays the Google sign-in dialog in the corner</li>
-            </ul>
-            <p class="mb-4">Done! I've fixed both issues:</p>
-            <ul class="list-disc pl-6 mb-4">
-                <li>Removed display: none; from the authorize button in index.html:13 - it will now be visible on page load</li>
-                <li>Removed google.accounts.id.prompt() from script.js:189 - this was causing the auto-display of the Google sign-in dialog in the corner</li>
-            </ul>
-            <p class="mb-4">Then I used the same model to generate most of the functionality code including handling the YouTube API calls and playlist creation. This is where I also use GPT-4.o to try and alternate between models for this task and it appears that GPT-4.o gave me deprecated codes. which I used Claude to fix that problem. Then I import a css file I made and asked GPT-4.o to generate Tailwind code that matches my premade style</p>
-            <p class="mb-4">Prompt: replace my current styling with tailwind of similar elements</p>
-            <p class="mb-4">I'll inspect index.html and styles.css to map existing styles to Tailwind classes. I'll update the todo list, then add Tailwind CDN to index.html, replace element classes with Tailwind, and clear styles.css Now I'll patch index.html to include Tailwind and update element classes, and overwrite styles.css to remove legacy rules. This replaces the old CSS with Tailwind utility classes.</p>
-            <p class="mb-4">Overall, they significantly improved the time it will take to complete this task as compared to if I had done this myself, and I think Claude model is better than GPT in working with the js script. However, there are still some limitations with their ability to get everything right on the first prompt and require supervision and request for updates.</p>
-            <button id="close-reflection" class="mt-4 bg-gray-800 text-white px-4 py-2 rounded">Close</button>
-        </div>
-    </div>
-
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="config.js"></script>
